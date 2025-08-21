@@ -8,6 +8,17 @@ app.use(express.json())
 initializeDatabase()
 
 
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
+
+
 const createBooks = async (newBook) => {
     try {
         const books = new Books(newBook)
@@ -21,6 +32,7 @@ const createBooks = async (newBook) => {
 
 app.post('/books', async (req, res) => {
     try {
+        console.log(req.body)
         const savedBook = await createBooks(req.body)
         res.status(201).json({message: "Book added successfully.", book: savedBook}) 
 
@@ -197,6 +209,7 @@ const deleteBookById = async (bookId) => {
 
 app.delete('/books/deleteBook/:bookId', async (req, res) => {
     try {
+        console.log(req.params.bookId)
         const deletedBook = await deleteBookById(req.params.bookId)
         deletedBook ? res.status(200).json({message: "Book deleted successfully."}) : res.status(404).json({error: "Book not found"})
 
